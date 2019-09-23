@@ -25,7 +25,7 @@ SECRET_KEY = '#im#co5^q(i!q9i3^wr26ys*lplbv+^pb7lkfj+akx)f%#oe*('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['nova-backend-osu.herokuapp.com/']
+ALLOWED_HOSTS = ['nova-backend-osu.herokuapp.com/', 'localhost']
 
 
 # Application definition
@@ -129,6 +129,7 @@ STATIC_ROOT  =   os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
 
 # Extra lookup directories for collectstatic to find static files
+print(PROJECT_ROOT)
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
 )
