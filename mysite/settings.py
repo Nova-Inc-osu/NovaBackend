@@ -25,7 +25,7 @@ SECRET_KEY = '#im#co5^q(i!q9i3^wr26ys*lplbv+^pb7lkfj+akx)f%#oe*('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['nova-backend-osu.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['nova-backend-osu.herokuapp.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
