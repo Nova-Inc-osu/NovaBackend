@@ -21,5 +21,6 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('conversations/<int:patient_id>', views.conversations, name='conversations'),
-    path('anxiety/1', views.anxiety, name='anxiety'),
+    path('anxiety/<int:patient_id>', views.anxiety, name='anxiety'),
+    path('login', views.login, name='login'),
 ]
