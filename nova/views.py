@@ -17,8 +17,7 @@ def request_body(request):
   return json.loads(body_unicode)
 
 def get_token_logged_in_user(request):
-  body = request_body(request)
-  return TokenModel.objects.get(key=body['token']).user
+  return TokenModel.objects.get(key=request.headers['token']).user
 
 # Create your views here.
 def index(request):
@@ -88,6 +87,20 @@ def create_message(request, conversation_id, from_patient=False, text=""):
     return JsonResponse(response_data)
   else:
     response_data = {'MustBePatientAndMustBeYourConvo': True}
+    return JsonResponse(response_data)
+
+def get_doctors_patients(request):
+  try:
+    # logged_in_doctor = Doctor.objects.get(user=request.user)
+    logged_in_doctor = Doctor.objects.get(user=get_token_logged_in_user(request))
+
+    patients = Patient.objects.filter(doctor=logged_in_doctor)
+
+    response_data = {'patients': serializers.serialize('json', patients)}
+    return JsonResponse(response_data)
+
+  except Doctor.DoesNotExist as dne:
+    response_data = {'conversations': [], 'youreNotADoctor': True}
     return JsonResponse(response_data)
 
 @csrf_exempt
