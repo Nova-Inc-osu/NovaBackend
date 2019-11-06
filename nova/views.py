@@ -67,23 +67,27 @@ def anxiety(request, patient_id):
 
 
 def create_conversation(request):
-  patient = Patient.objects.get(user=request.user)
+  patient = Patient.objects.get(user=get_token_logged_in_user(request))
 
-  conversation = Conversation.create(patient=patient)
+  conversation = Conversation.objects.create(participant=patient)
 
-  response_data = {'converation_id': conversation.id}
+  response_data = {'converation_id': conversation.pk}
   return JsonResponse(response_data)
 
-def create_message(request, conversation_id, from_patient=False, text=""):
+@csrf_exempt
+def create_message(request, conversation_id):
+  body = request_body(request)
+  from_patient = body['from_patient']
+  text = body['text']
   # patient = Patient.objects.get(user=request.user)
   patient = Patient.objects.get(user=get_token_logged_in_user(request))
 
   conversation = Conversation.objects.get(pk=conversation_id)
 
-  if conversation.patient == patient:
-    msg = Message.create(conversation=conversation, from_patient=from_patient, text=text)
+  if conversation.participant == patient:
+    msg = Message.objects.create(conversation=conversation, from_patient=from_patient, text=text)
 
-    response_data = {'converation_id': conversation.id}
+    response_data = {'message': serializers.serialize('json', [msg])}
     return JsonResponse(response_data)
   else:
     response_data = {'MustBePatientAndMustBeYourConvo': True}
