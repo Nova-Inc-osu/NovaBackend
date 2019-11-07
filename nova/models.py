@@ -18,7 +18,9 @@ class Conversation(models.Model):
   date_created = models.DateField(auto_now_add=True)
 
 class Message(models.Model):
-  conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
-  from_patient = models.BooleanField()
-  date_created = models.DateField(auto_now_add=True)
-  text         = models.CharField(max_length=1000)
+  conversation   = models.ForeignKey(Conversation, on_delete=models.CASCADE)
+  from_patient   = models.BooleanField()
+  date_created   = models.DateField(auto_now_add=True)
+  text           = models.CharField(max_length=1000)
+  analysis_value = models.FloatField(default=0)
+

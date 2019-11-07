@@ -79,13 +79,14 @@ def create_message(request, conversation_id):
   body = request_body(request)
   from_patient = body['from_patient']
   text = body['text']
+  analysis_value = analyze_text(text)
   # patient = Patient.objects.get(user=request.user)
   patient = Patient.objects.get(user=get_token_logged_in_user(request))
 
   conversation = Conversation.objects.get(pk=conversation_id)
 
   if conversation.participant == patient:
-    msg = Message.objects.create(conversation=conversation, from_patient=from_patient, text=text)
+    msg = Message.objects.create(conversation=conversation, from_patient=from_patient, text=text, analysis_value=analysis_value)
 
     response_data = {'message': serializers.serialize('json', [msg])}
     return JsonResponse(response_data)
@@ -128,3 +129,17 @@ def login(request):
     response_data = {'token': 'invalid'}
     return JsonResponse(response_data)
   
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+
+def analyze_text(text):
+  # install Vader and make sure you download the lexicon as well
+  sid = SentimentIntensityAnalyzer()
+
+  ss = sid.polarity_scores(text)
+
+  if ss["compound"] == 0.0:
+    return 0
+  elif ss["compound"] > 0.0:
+    return 1
+  else:
+    return -1
