@@ -123,7 +123,20 @@ def login(request):
     except TokenModel.DoesNotExist as identifier:
       token = TokenModel.objects.create(user=user)
 
-    response_data = {'token': token.key}
+    isDoctor = False
+    try:
+      doctor = Doctor.objects.get(user=user)
+
+      if doctor.pk > 0:
+        isDoctor = True
+    except:
+      pass
+
+    response_data = {
+      'token': token.key,
+      'isDoctor': isDoctor,
+      'id': user.pk,
+    }
     return JsonResponse(response_data)
   else:
     response_data = {'token': 'invalid'}
