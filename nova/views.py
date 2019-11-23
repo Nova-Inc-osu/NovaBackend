@@ -101,8 +101,10 @@ def get_doctors_patients(request):
 
     patients = Patient.objects.filter(doctor=logged_in_doctor)
 
-    response_data = {'patients': serializers.serialize('json', patients)}
-    return JsonResponse(response_data)
+    # response_data = {'patients': serializers.serialize('json', patients)}
+    # return JsonResponse(response_data)
+
+    return JsonResponse(list(patients.values()), safe=False)
 
   except Doctor.DoesNotExist as dne:
     response_data = {'conversations': [], 'youreNotADoctor': True}
