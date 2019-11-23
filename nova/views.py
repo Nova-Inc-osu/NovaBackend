@@ -38,8 +38,12 @@ def conversations(request, patient_id):
 
       conversations_with_messages = [serializers.serialize('json', [msg,]) for convo in conversations for msg in Message.objects.filter(conversation=convo)]
 
-      response_data = {'conversations': conversations_with_messages}
-      return JsonResponse(response_data)
+      # response_data = {'conversations': conversations_with_messages}
+      # return JsonResponse(response_data)
+
+      unserialized_conversations_with_messages = [msg for convo in conversations for msg in Message.objects.filter(conversation=convo).values()]
+
+      return JsonResponse(unserialized_conversations_with_messages, safe=False)
 
     else:
       response_data = {'conversations': [], 'thisIsntYourPatient': True}
